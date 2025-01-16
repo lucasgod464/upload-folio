@@ -18,6 +18,8 @@ export type Database = {
           id: string
           size: number | null
           uploaded_by: string | null
+          is_notice: boolean | null
+          is_active: boolean | null
         }
         Insert: {
           content_type?: string | null
@@ -27,6 +29,8 @@ export type Database = {
           id?: string
           size?: number | null
           uploaded_by?: string | null
+          is_notice?: boolean | null
+          is_active?: boolean | null
         }
         Update: {
           content_type?: string | null
@@ -36,6 +40,8 @@ export type Database = {
           id?: string
           size?: number | null
           uploaded_by?: string | null
+          is_notice?: boolean | null
+          is_active?: boolean | null
         }
         Relationships: []
       }

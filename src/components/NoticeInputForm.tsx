@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const NoticeInputForm = () => {
   const [topNotice, setTopNotice] = useState("");
   const [bottomNotice, setBottomNotice] = useState("");
+    const [topNoticeColor, setTopNoticeColor] = useState("#ffffff");
+  const [bottomNoticeColor, setBottomNoticeColor] = useState("#ffffff");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -19,7 +21,7 @@ export const NoticeInputForm = () => {
     try {
       const { error } = await supabase
         .from('files')
-        .insert({ filename: "top_notice", file_path: topNotice, is_notice: true });
+        .insert({ filename: "top_notice", file_path: topNotice, is_notice: true, content_type: topNoticeColor, is_active: true });
 
       if (error) {
         console.error('Erro ao adicionar aviso superior:', error);
@@ -28,7 +30,7 @@ export const NoticeInputForm = () => {
 
       const { error: bottomError } = await supabase
         .from('files')
-        .insert({ filename: "bottom_notice", file_path: bottomNotice, is_notice: true });
+        .insert({ filename: "bottom_notice", file_path: bottomNotice, is_notice: true, content_type: bottomNoticeColor, is_active: true });
 
       if (bottomError) {
         console.error('Erro ao adicionar aviso inferior:', bottomError);
@@ -41,6 +43,8 @@ export const NoticeInputForm = () => {
       });
       setTopNotice("");
       setBottomNotice("");
+      setTopNoticeColor("#ffffff");
+      setBottomNoticeColor("#ffffff");
     } catch (error) {
       console.error('Erro ao adicionar avisos:', error);
       toast({
@@ -68,12 +72,34 @@ export const NoticeInputForm = () => {
           />
         </div>
         <div className="space-y-2">
+          <Label htmlFor="topNoticeColor">Cor do Aviso Superior</Label>
+          <Input
+            id="topNoticeColor"
+            type="color"
+            value={topNoticeColor}
+            onChange={(e) => setTopNoticeColor(e.target.value)}
+            className="w-full"
+            required
+          />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="bottomNotice">Aviso Inferior</Label>
           <Input
             id="bottomNotice"
             type="text"
             value={bottomNotice}
             onChange={(e) => setBottomNotice(e.target.value)}
+            className="w-full"
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="bottomNoticeColor">Cor do Aviso Inferior</Label>
+           <Input
+            id="bottomNoticeColor"
+            type="color"
+            value={bottomNoticeColor}
+            onChange={(e) => setBottomNoticeColor(e.target.value)}
             className="w-full"
             required
           />

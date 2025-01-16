@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const UserPanel = () => {
   const [links, setLinks] = useState<any[]>([]);
   const [videoLinks, setVideoLinks] = useState<any[]>([]);
-  const [topNotice, setTopNotice] = useState<string | null>(null);
-  const [bottomNotice, setBottomNotice] = useState<string | null>(null);
+  const [topNotice, setTopNotice] = useState<any | null>(null);
+  const [bottomNotice, setBottomNotice] = useState<any | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -64,10 +67,10 @@ const UserPanel = () => {
         }
 
         if (data) {
-          const top = data.find(item => item.filename === 'top_notice');
-          const bottom = data.find(item => item.filename === 'bottom_notice');
-          setTopNotice(top?.file_path || null);
-          setBottomNotice(bottom?.file_path || null);
+          const top = data.find(item => item.filename === 'top_notice' && item.is_active);
+          const bottom = data.find(item => item.filename === 'bottom_notice' && item.is_active);
+          setTopNotice(top || null);
+          setBottomNotice(bottom || null);
         }
       } catch (error) {
         console.error('Erro ao buscar avisos:', error);
@@ -79,19 +82,25 @@ const UserPanel = () => {
     fetchNotices();
   }, []);
 
+  const handleLogout = () => {
+    // In a real app, you would clear the user's session here
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-background to-secondary">
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="space-y-2">
+        <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold tracking-tight">Painel do Usuário</h1>
-          <p className="text-muted-foreground">
-            Aqui estão as últimas atualizações e links para download
-          </p>
+          <Button onClick={handleLogout} variant="outline">Sair</Button>
         </div>
+        <p className="text-muted-foreground">
+          Aqui estão as últimas atualizações e links para download
+        </p>
         {topNotice && (
-          <Card className="w-full p-4 glass-card fade-in">
+          <Card className="w-full p-4 glass-card fade-in" style={{ backgroundColor: topNotice.content_type || 'white' }}>
             <div className="text-center text-lg font-semibold text-foreground">
-              {topNotice}
+              {topNotice.file_path}
             </div>
           </Card>
         )}
@@ -129,9 +138,9 @@ const UserPanel = () => {
           </div>
         </Card>
         {bottomNotice && (
-          <Card className="w-full p-4 glass-card fade-in">
+          <Card className="w-full p-4 glass-card fade-in" style={{ backgroundColor: bottomNotice?.content_type || 'white' }}>
             <div className="text-center text-lg font-semibold text-foreground">
-              {bottomNotice}
+              {bottomNotice.file_path}
             </div>
           </Card>
         )}

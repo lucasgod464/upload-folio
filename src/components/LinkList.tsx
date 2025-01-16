@@ -10,7 +10,8 @@ export const LinkList = () => {
       try {
         const { data, error } = await supabase
           .from('files')
-          .select('*');
+          .select('*')
+          .not('filename', 'eq', 'video');
 
         if (error) {
           console.error('Erro ao buscar links:', error);

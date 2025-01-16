@@ -2,6 +2,8 @@ import { UserCreationForm } from "@/components/UserCreationForm";
 import { LinkInputForm } from "@/components/LinkInputForm";
 import { LinkList } from "@/components/LinkList";
 import { UserList } from "@/components/UserList";
+import { VideoLinkInputForm } from "@/components/VideoLinkInputForm";
+import { VideoList } from "@/components/VideoList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Admin = () => {
@@ -11,13 +13,14 @@ const Admin = () => {
         <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage users and download links
+            Manage users, download links, and video links
           </p>
         </div>
         <Tabs defaultValue="users" className="w-full">
           <TabsList>
             <TabsTrigger value="users">Users</TabsTrigger>
             <TabsTrigger value="links">Links</TabsTrigger>
+             <TabsTrigger value="videos">Videos</TabsTrigger>
             <TabsTrigger value="userlist">User List</TabsTrigger>
           </TabsList>
           <TabsContent value="users">
@@ -26,6 +29,10 @@ const Admin = () => {
           <TabsContent value="links">
             <LinkInputForm />
             <LinkList />
+          </TabsContent>
+           <TabsContent value="videos">
+            <VideoLinkInputForm />
+            <VideoList />
           </TabsContent>
           <TabsContent value="userlist">
             <UserList />

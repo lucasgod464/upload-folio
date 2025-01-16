@@ -7,27 +7,17 @@ import { VideoList } from "@/components/VideoList";
 import { NoticeInputForm } from "@/components/NoticeInputForm";
 import { NoticeList } from "@/components/NoticeList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    // In a real app, you would clear the user's session here
-    navigate("/");
-  };
-
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-background to-secondary">
       <div className="max-w-4xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
+        <div className="space-y-2">
           <h1 className="text-3xl font-bold tracking-tight">Painel de Admin</h1>
-          <Button onClick={handleLogout} variant="outline">Sair</Button>
-        </div>
-        <p className="text-muted-foreground">
+          <p className="text-muted-foreground">
             Gerenciar usuários, links de download e avisos
           </p>
+        </div>
         <Tabs defaultValue="users" className="w-full">
           <TabsList className="bg-muted/50">
             <TabsTrigger value="users">Usuários</TabsTrigger>

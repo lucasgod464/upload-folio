@@ -19,7 +19,7 @@ export const LinkInputForm = () => {
 
     try {
       const { error } = await supabase
-        .from('files')
+        .from('download_links')
         .insert({ file_path: link, filename: "download", description, version });
 
       if (error) {

@@ -4,51 +4,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-export const LoginForm = () => {
+export const UserCreationForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('usuarios')
-        .select('*')
-        .eq('username', username)
-        .eq('password', password)
-        .maybeSingle();
+        .insert({ username, password, is_admin: false });
 
       if (error) {
-        console.error('Erro na consulta:', error);
+        console.error('Erro ao criar usuário:', error);
         throw error;
       }
 
-      if (data) {
-        toast({
-          title: "Login bem-sucedido",
-          description: "Bem-vindo de volta!",
-        });
-        navigate(data.is_admin ? '/admin' : '/user');
-      } else {
-        toast({
-          title: "Erro no login",
-          description: "Usuário ou senha incorretos",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error('Erro no login:', error);
       toast({
-        title: "Erro no login",
-        description: "Ocorreu um erro ao tentar fazer login",
+        title: "Usuário criado com sucesso",
+        description: "O novo usuário foi criado com sucesso!",
+      });
+      setUsername("");
+      setPassword("");
+    } catch (error) {
+      console.error('Erro ao criar usuário:', error);
+      toast({
+        title: "Erro ao criar usuário",
+        description: "Ocorreu um erro ao tentar criar o usuário",
         variant: "destructive",
       });
     } finally {
@@ -82,7 +70,7 @@ export const LoginForm = () => {
           />
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Entrando..." : "Entrar"}
+          {isLoading ? "Criando..." : "Criar Usuário"}
         </Button>
       </form>
     </Card>

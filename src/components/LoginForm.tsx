@@ -24,9 +24,10 @@ export const LoginForm = () => {
         .select('*')
         .eq('username', username)
         .eq('password', password)
-        .single();
+        .maybeSingle();
 
       if (error) {
+        console.error('Erro na consulta:', error);
         throw error;
       }
 

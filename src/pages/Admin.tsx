@@ -25,7 +25,7 @@ const Admin = () => {
              <TabsTrigger value="videos">Vídeos</TabsTrigger>
              <TabsTrigger value="notices">Avisos</TabsTrigger>
           </TabsList>
-          <TabsContent value="users" className="p-4 flex gap-8">
+          <TabsContent value="users" className="flex gap-8 items-start">
             <div className="flex-1">
               <UserCreationForm />
             </div>
@@ -33,7 +33,7 @@ const Admin = () => {
               <UserList />
             </div>
           </TabsContent>
-          <TabsContent value="links" className="p-4 flex gap-8">
+          <TabsContent value="links" className="flex gap-8 items-start">
             <div className="flex-1">
               <LinkInputForm />
             </div>
@@ -41,7 +41,7 @@ const Admin = () => {
               <LinkList />
             </div>
           </TabsContent>
-           <TabsContent value="videos" className="p-4 flex gap-8">
+           <TabsContent value="videos" className="flex gap-8 items-start">
             <div className="flex-1">
               <VideoLinkInputForm />
             </div>
@@ -49,7 +49,7 @@ const Admin = () => {
               <VideoList />
             </div>
           </TabsContent>
-          <TabsContent value="notices" className="p-4 flex gap-8">
+          <TabsContent value="notices" className="flex gap-8 items-start">
             <div className="flex-1">
               <NoticeInputForm />
             </div>

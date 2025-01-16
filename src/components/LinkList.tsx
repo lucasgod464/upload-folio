@@ -134,9 +134,13 @@ export const LinkList = () => {
                   </div>
                 ) : (
                   <div className="flex items-center justify-between">
-                    <a href={link.file_path} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">
-                      {link.filename}
-                    </a>
+                    <div className="flex flex-col">
+                      <a href={link.file_path} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">
+                        {link.filename}
+                      </a>
+                      {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
+                      {link.version && <p className="text-sm text-muted-foreground mt-1">Versão: {link.version}</p>}
+                    </div>
                     <div className="flex items-center space-x-2">
                       <Button
                         variant="ghost"
@@ -155,7 +159,6 @@ export const LinkList = () => {
                     </div>
                   </div>
                 )}
-                {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
               </li>
             ))}
           </ul>

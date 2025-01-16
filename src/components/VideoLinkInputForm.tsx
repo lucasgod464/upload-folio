@@ -71,7 +71,7 @@ export const VideoLinkInputForm = () => {
           />
         </div>
          <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Descrição</Label>
           <Input
             id="description"
             type="text"
@@ -82,7 +82,7 @@ export const VideoLinkInputForm = () => {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="version">Version</Label>
+          <Label htmlFor="version">Versão</Label>
           <Input
             id="version"
             type="text"

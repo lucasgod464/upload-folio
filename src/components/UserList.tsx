@@ -80,10 +80,10 @@ export const UserList = () => {
   return (
     <Card className="w-full max-w-md p-8 glass-card fade-in">
       <div className="space-y-4">
-        <h2 className="text-xl font-semibold">Users</h2>
+        <h2 className="text-xl font-semibold">Usuários</h2>
         <Input
           type="text"
-          placeholder="Search users..."
+          placeholder="Buscar usuários..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="mb-4"
@@ -91,11 +91,11 @@ export const UserList = () => {
         {filteredUsers.length > 0 ? (
           <ul className="space-y-2">
             {filteredUsers.map((user) => (
-              <li key={user.id} className="flex flex-col p-3 bg-secondary rounded-lg">
+              <li key={user.id} className="flex flex-col p-3 bg-secondary rounded-lg shadow-md">
                 {editingUser === user.id ? (
                   <div className="space-y-2">
                     <div className="space-y-1">
-                      <Label htmlFor={`username-${user.id}`}>Username</Label>
+                      <Label htmlFor={`username-${user.id}`}>Usuário</Label>
                       <Input
                         id={`username-${user.id}`}
                         type="text"
@@ -104,7 +104,7 @@ export const UserList = () => {
                       />
                     </div>
                     <div className="space-y-1">
-                      <Label htmlFor={`password-${user.id}`}>Password</Label>
+                      <Label htmlFor={`password-${user.id}`}>Senha</Label>
                       <Input
                         id={`password-${user.id}`}
                         type="text"
@@ -113,21 +113,21 @@ export const UserList = () => {
                       />
                     </div>
                     <div className="flex justify-end space-x-2">
-                      <Button size="sm" onClick={() => handleSaveEdit(user.id)}>Save</Button>
-                      <Button size="sm" variant="ghost" onClick={handleCancelEdit}>Cancel</Button>
+                      <Button size="sm" onClick={() => handleSaveEdit(user.id)}>Salvar</Button>
+                      <Button size="sm" variant="ghost" onClick={handleCancelEdit}>Cancelar</Button>
                     </div>
                   </div>
                 ) : (
                   <div className="flex items-center justify-between">
                     <span className="text-sm">{user.username}</span>
-                    <Button size="sm" onClick={() => handleEdit(user)}>Edit</Button>
+                    <Button size="sm" onClick={() => handleEdit(user)}>Editar</Button>
                   </div>
                 )}
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">No users available.</p>
+          <p className="text-sm text-muted-foreground">Nenhum usuário disponível.</p>
         )}
       </div>
     </Card>

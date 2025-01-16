@@ -11,7 +11,7 @@ export const LinkList = () => {
         const { data, error } = await supabase
           .from('files')
           .select('*')
-          .not('filename', 'eq', 'video');
+          .not('filename', 'in', ['video', 'top_notice', 'bottom_notice']);
 
         if (error) {
           console.error('Erro ao buscar links:', error);
@@ -36,13 +36,13 @@ export const LinkList = () => {
         {links.length > 0 ? (
           <ul className="space-y-2">
             {links.map((link) => (
-              <li key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg">
+              <li key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg shadow-md">
                 <div className="flex items-center justify-between">
                   <a href={link.file_path} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">
                     {link.filename}
                   </a>
                   <span className="text-sm text-muted-foreground">
-                    {link.version && <p>Version: {link.version}</p>}
+                    {link.version && <p>Versão: {link.version}</p>}
                   </span>
                 </div>
                 {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
@@ -50,7 +50,7 @@ export const LinkList = () => {
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">No links available.</p>
+          <p className="text-sm text-muted-foreground">Nenhum link disponível.</p>
         )}
       </div>
     </Card>

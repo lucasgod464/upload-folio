@@ -6,10 +6,9 @@ import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-export const LinkInputForm = () => {
-  const [link, setLink] = useState("");
-  const [description, setDescription] = useState("");
-  const [version, setVersion] = useState("");
+export const NoticeInputForm = () => {
+  const [topNotice, setTopNotice] = useState("");
+  const [bottomNotice, setBottomNotice] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -20,25 +19,33 @@ export const LinkInputForm = () => {
     try {
       const { error } = await supabase
         .from('files')
-        .insert({ file_path: link, filename: "download", description, version });
+        .insert({ filename: "top_notice", file_path: topNotice, is_notice: true });
 
       if (error) {
-        console.error('Erro ao adicionar link:', error);
+        console.error('Erro ao adicionar aviso superior:', error);
         throw error;
       }
 
+      const { error: bottomError } = await supabase
+        .from('files')
+        .insert({ filename: "bottom_notice", file_path: bottomNotice, is_notice: true });
+
+      if (bottomError) {
+        console.error('Erro ao adicionar aviso inferior:', bottomError);
+        throw bottomError;
+      }
+
       toast({
-        title: "Link adicionado com sucesso",
-        description: "O novo link foi adicionado com sucesso!",
+        title: "Avisos adicionados com sucesso",
+        description: "Os novos avisos foram adicionados com sucesso!",
       });
-      setLink("");
-      setDescription("");
-      setVersion("");
+      setTopNotice("");
+      setBottomNotice("");
     } catch (error) {
-      console.error('Erro ao adicionar link:', error);
+      console.error('Erro ao adicionar avisos:', error);
       toast({
-        title: "Erro ao adicionar link",
-        description: "Ocorreu um erro ao tentar adicionar o link",
+        title: "Erro ao adicionar avisos",
+        description: "Ocorreu um erro ao tentar adicionar os avisos",
         variant: "destructive",
       });
     } finally {
@@ -50,40 +57,29 @@ export const LinkInputForm = () => {
     <Card className="w-full max-w-md p-8 glass-card fade-in">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="link">Link</Label>
+          <Label htmlFor="topNotice">Aviso Superior</Label>
           <Input
-            id="link"
+            id="topNotice"
             type="text"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+            value={topNotice}
+            onChange={(e) => setTopNotice(e.target.value)}
             className="w-full"
             required
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="description">Descrição</Label>
+          <Label htmlFor="bottomNotice">Aviso Inferior</Label>
           <Input
-            id="description"
+            id="bottomNotice"
             type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full"
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="version">Versão</Label>
-          <Input
-            id="version"
-            type="text"
-            value={version}
-            onChange={(e) => setVersion(e.target.value)}
+            value={bottomNotice}
+            onChange={(e) => setBottomNotice(e.target.value)}
             className="w-full"
             required
           />
         </div>
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Adicionando..." : "Adicionar Link"}
+          {isLoading ? "Adicionando..." : "Adicionar Avisos"}
         </Button>
       </form>
     </Card>

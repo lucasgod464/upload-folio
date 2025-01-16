@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 const UserPanel = () => {
   const [links, setLinks] = useState<any[]>([]);
   const [videoLinks, setVideoLinks] = useState<any[]>([]);
+  const [topNotice, setTopNotice] = useState<string | null>(null);
+  const [bottomNotice, setBottomNotice] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchLinks = async () => {
@@ -12,7 +14,9 @@ const UserPanel = () => {
         const { data, error } = await supabase
           .from('files')
           .select('*')
-          .not('filename', 'eq', 'video');
+          .not('filename', 'eq', 'video')
+          .not('filename', 'eq', 'top_notice')
+          .not('filename', 'eq', 'bottom_notice');
 
         if (error) {
           console.error('Erro ao buscar links:', error);
@@ -47,54 +51,61 @@ const UserPanel = () => {
       }
     };
 
+    const fetchNotices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('files')
+          .select('*')
+          .in('filename', ['top_notice', 'bottom_notice']);
+
+        if (error) {
+          console.error('Erro ao buscar avisos:', error);
+          return;
+        }
+
+        if (data) {
+          const top = data.find(item => item.filename === 'top_notice');
+          const bottom = data.find(item => item.filename === 'bottom_notice');
+          setTopNotice(top?.file_path || null);
+          setBottomNotice(bottom?.file_path || null);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar avisos:', error);
+      }
+    };
+
     fetchLinks();
     fetchVideoLinks();
+    fetchNotices();
   }, []);
 
   return (
     <div className="min-h-screen p-8 bg-gradient-to-br from-background to-secondary">
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">User Panel</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Painel do Usuário</h1>
           <p className="text-muted-foreground">
-            Here are the latest updates and download links
+            Aqui estão as últimas atualizações e links para download
           </p>
         </div>
+        {topNotice && (
+          <Card className="w-full p-4 glass-card fade-in">
+            <div className="text-center text-lg font-semibold text-foreground">
+              {topNotice}
+            </div>
+          </Card>
+        )}
         <Card className="w-full p-8 glass-card fade-in">
           <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Download Links</h2>
-            {links.length > 0 ? (
-              <ul className="space-y-2">
-                {links.map((link) => (
-                  <li key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <a href={link.file_path} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">
-                        {link.filename}
-                      </a>
-                      <span className="text-sm text-muted-foreground">
-                        {link.version && <p>Version: {link.version}</p>}
-                      </span>
-                    </div>
-                    {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">No links available.</p>
-            )}
-          </div>
-        </Card>
-        <Card className="w-full p-8 glass-card fade-in">
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold">Video Links</h2>
+            <h2 className="text-xl font-semibold">Links de Vídeo</h2>
             {videoLinks.length > 0 ? (
               <div className="space-y-2">
                 {videoLinks.map((link) => (
-                  <div key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg">
+                  <div key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg shadow-md">
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium">{link.filename}</span>
                       <span className="text-sm text-muted-foreground">
-                        {link.version && <p>Version: {link.version}</p>}
+                        {link.version && <p>Versão: {link.version}</p>}
                       </span>
                     </div>
                     {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
@@ -113,7 +124,38 @@ const UserPanel = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-muted-foreground">No video links available.</p>
+              <p className="text-sm text-muted-foreground">Nenhum link de vídeo disponível.</p>
+            )}
+          </div>
+        </Card>
+        {bottomNotice && (
+          <Card className="w-full p-4 glass-card fade-in">
+            <div className="text-center text-lg font-semibold text-foreground">
+              {bottomNotice}
+            </div>
+          </Card>
+        )}
+        <Card className="w-full p-8 glass-card fade-in">
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Links para Download</h2>
+            {links.length > 0 ? (
+              <ul className="space-y-2">
+                {links.map((link) => (
+                  <li key={link.id} className="flex flex-col p-3 bg-secondary rounded-lg shadow-md">
+                    <div className="flex items-center justify-between">
+                      <a href={link.file_path} target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">
+                        {link.filename}
+                      </a>
+                      <span className="text-sm text-muted-foreground">
+                        {link.version && <p>Versão: {link.version}</p>}
+                      </span>
+                    </div>
+                    {link.description && <p className="text-sm text-muted-foreground mt-1">{link.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">Nenhum link disponível.</p>
             )}
           </div>
         </Card>

@@ -143,7 +143,6 @@
               O tempo de acesso exibido acima é referente ao acesso a esta área de atualizações.
             </p>
             <p className="text-muted-foreground">
-              Aqui estão as últimas atualizações e links para download
             </p>
             {topNotice && (
               <Card className="w-full p-4 glass-card fade-in" style={{ backgroundColor: topNotice.content_type || 'white' }}>
